@@ -18,284 +18,284 @@ asian_countries = countries.get('Asia', [])
 # Pre-computed continent weights for males
 continent_weights_male = {
     'africa': {
-        'weights': np.array([55.47308369,  0.26737533]),
+        'weights': np.array([48.80995999999999, 7.427797663635824]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.26737533
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.34310577809388354
     },
     'americas': {
-        'weights': np.array([66.48479853,  0.2635029]),
-        'scaler': StandardScaler(), 
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.2635029
+        'weights': np.array([65.68893333333332, 6.095013555204009]),
+        'scaler': StandardScaler(),
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.28154164438122337
     },
     'asia': {
-        'weights': np.array([63.79659836,  0.30434426]),
+        'weights': np.array([59.29728399999999, 9.206187619878207]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.30434426
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.4252533940256046
     },
     'europe': {
-        'weights': np.array([69.08087097,  0.22166447]),
+        'weights': np.array([68.60288933333332, 3.593142724935098]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.22166447
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.16597490753911814
     }
 }
 
 # Pre-computed continent weights for females  
 continent_weights_female = {
     'africa': {
-        'weights': np.array([58.15750819,  0.29098361]),
+        'weights': np.array([52.345453333333325, 7.342837591796632]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.29098361
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3391812916073966
     },
     'americas': {
-        'weights': np.array([72.11229612,  0.24901639]),
+        'weights': np.array([71.76667066666667, 6.1826456876559845]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.24901639
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.28558955903271693
     },
     'asia': {
-        'weights': np.array([68.83770492,  0.32360656]),
+        'weights': np.array([62.89476133333332, 10.227587577702595]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.32360656
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.4724340312944523
     },
     'europe': {
-        'weights': np.array([77.12491502,  0.20491803]),
+        'weights': np.array([75.83362399999999, 4.119186558463535]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.20491803
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.19027399146514914
     }
 }
 
 # Pre-computed Europe country weights for males
 europe_weights_male = {
     'germany': {
-        'weights': np.array([70.01491935,  0.23032258]),
+        'weights': np.array([71.87143733333335, 4.587225890236901]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.23032258
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.2118937240398295
     },
     'italy': {
-        'weights': np.array([71.95483871,  0.2183871]),
+        'weights': np.array([73.03381199999998, 5.376565529051979]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.2183871
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.24835500142247505
     },
     'portugal': {
-        'weights': np.array([66.29032258,  0.31451613]),
+        'weights': np.array([69.313596, 6.778808123988059]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.31451613
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3131275704125178
     },
     'russian federation': {
-        'weights': np.array([65.61290323,  0.12258065]),
+        'weights': np.array([62.05815333333332, 1.6053944638817943]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.12258065
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.07415658605974408
     }
 }
 
 # Pre-computed Europe country weights for females
 europe_weights_female = {
     'germany': {
-        'weights': np.array([76.91612903,  0.22258065]),
+        'weights': np.array([77.58053733333333, 4.482722237121892]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.22258065
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.20706647795163602
     },
     'italy': {
-        'weights': np.array([78.49354839,  0.21612903]),
+        'weights': np.array([78.54601733333332, 5.35285775826014]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.21612903
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.24725988904694168
     },
     'portugal': {
-        'weights': np.array([73.42903226,  0.28387097]),
+        'weights': np.array([75.74587066666665, 6.984728872246191]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.28387097
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3226394879089615
     },
     'russian federation': {
-        'weights': np.array([75.53548387,  0.07741935]),
+        'weights': np.array([72.75473999999997, 2.7612556404887654]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.07741935
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.12754827311522102
     }
 }
 
 # Pre-computed Asia country weights for males
 asian_weights_male = {
     'japan': {
-        'weights': np.array([74.21612903,  0.23225806]),
+        'weights': np.array([73.66671333333332, 6.084929936909473]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.23225806
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.2810758605974396
     },
     'sri lanka': {
-        'weights': np.array([66.34838710,  0.30322581]),
+        'weights': np.array([65.00730933333332, 5.218823354737371]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.30322581
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.24106855476529154
     },
     'indonesia': {
-        'weights': np.array([62.12258065,  0.35806452]),
+        'weights': np.array([57.45450133333332, 9.04073326951489]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.35806452
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.4176107055476531
     },
     'china': {
-        'weights': np.array([66.51612903,  0.32580645]),
+        'weights': np.array([62.094491999999995, 10.704405754137152]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.32580645
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.49445927738264545
     }
 }
 
 # Pre-computed Asia country weights for females
 asian_weights_female = {
     'japan': {
-        'weights': np.array([80.66451613,  0.24516129]),
+        'weights': np.array([79.32922933333333, 6.857907400256124]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.24516129
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3167813342816501
     },
     'sri lanka': {
-        'weights': np.array([71.17741935,  0.32903226]),
+        'weights': np.array([71.21257333333331, 6.811560682917558]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.32903226
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.31464048079658596
     },
     'indonesia': {
-        'weights': np.array([65.98064516,  0.38709677]),
+        'weights': np.array([61.29604133333332, 9.02926844501308]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.38709677
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.4170811209103843
     },
     'china': {
-        'weights': np.array([70.51290323,  0.33548387]),
+        'weights': np.array([66.70746933333334, 11.387949099336106]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.33548387
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.5260335988620198
     }
 }
 
 # Pre-computed Africa country weights for males
 africa_weights_male = {
     'sierra leone': {
-        'weights': np.array([37.69032258,  0.26451613]),
+        'weights': np.array([42.28548533333333, 8.493151586584709]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.26451613
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.39231674253200555
     },
     'congo': {
-        'weights': np.array([54.34838710,  0.24516129]),
+        'weights': np.array([53.93806533333332, 5.957411826044415]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.24516129
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.27518552773826455
     },
     'madagascar': {
-        'weights': np.array([53.38064516,  0.29032258]),
+        'weights': np.array([51.46081333333332, 7.4008190590773815]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.29032258
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3418595789473682
     }
 }
 
 # Pre-computed Africa country weights for females
 africa_weights_female = {
     'sierra leone': {
-        'weights': np.array([38.81935484,  0.27741935]),
+        'weights': np.array([45.109029333333325, 8.3094688987945]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.27741935
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3838320483641535
     },
     'congo': {
-        'weights': np.array([57.23225806,  0.28064516]),
+        'weights': np.array([56.76254666666666, 5.822295171764747]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.28064516
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.268944201991465
     },
     'madagascar': {
-        'weights': np.array([56.41935484,  0.31451613]),
+        'weights': np.array([54.23456133333332, 7.721151302301849]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.31451613
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.3566564068278804
     }
 }
 
 # Pre-computed America country weights for males
 america_weights_male = {
     'brazil': {
-        'weights': np.array([63.81612903,  0.27741935]),
+        'weights': np.array([61.29868399999998, 7.972486056456338]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.27741935
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.36826609388335685
     },
     'puerto rico': {
-        'weights': np.array([68.91612903,  0.26451613]),
+        'weights': np.array([70.08885066666664, 4.219312491253628]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.26451613
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.1948990213371267
     },
     'cuba': {
-        'weights': np.array([72.72903226,  0.17741935]),
+        'weights': np.array([69.755504, 5.358231811984468]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.17741935
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.24750812802275962
     },
     'canada': {
-        'weights': np.array([73.96774194,  0.20967742]),
+        'weights': np.array([73.47906133333333, 4.517824066075921]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.20967742
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.20868790611664279
     },
     'united states of america': {
-        'weights': np.array([72.03548387,  0.15161290]),
+        'weights': np.array([71.22021733333332, 3.70491923616979]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.15161290
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.17113810241820782
     }
 }
 
 # Pre-computed America country weights for females
 america_weights_female = {
     'brazil': {
-        'weights': np.array([70.65806452,  0.27096774]),
+        'weights': np.array([66.86967466666664, 8.806194958418565]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.27096774
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.4067768819345662
     },
     'puerto rico': {
-        'weights': np.array([75.30645161,  0.24516129]),
+        'weights': np.array([76.66809599999999, 5.384124716773799]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.24516129
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.24870417638691306
     },
     'cuba': {
-        'weights': np.array([77.24516129,  0.19354839]),
+        'weights': np.array([73.80328666666665, 5.609472765325014]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.19354839
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.2591134822190615
     },
     'canada': {
-        'weights': np.array([79.31612903,  0.20322581]),
+        'weights': np.array([79.18660799999998, 3.9433650933207063]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.20322581
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.18215242389758185
     },
     'united states of america': {
-        'weights': np.array([76.63548387,  0.15161290]),
+        'weights': np.array([77.49545199999999, 3.0327809736541753]),
         'scaler': StandardScaler(),
-        'X_template': np.array([1., 0.]),
-        'slope_raw': 0.15161290
+        'X_template': np.array([1.0, -1.709108724329423]),
+        'slope_raw': 0.1400906059743955
     }
 }
 
-# Initialize scalers with proper parameters (approximated for year range 1950-2050)
+# Initialize scalers with proper parameters from actual data (1950-2024, mean=1987.0, std=21.65)
 for weights_dict in [continent_weights_male, continent_weights_female, 
                      europe_weights_male, europe_weights_female,
                      asian_weights_male, asian_weights_female,
@@ -304,9 +304,9 @@ for weights_dict in [continent_weights_male, continent_weights_female,
     for model_info in weights_dict.values():
         if model_info is not None:
             scaler = model_info['scaler']
-            # Set scaler parameters for year range 1950-2050
-            scaler.mean_ = np.array([2000.0])  # Middle of year range
-            scaler.scale_ = np.array([28.87])   # Approx std of years 1950-2050
+            # Set scaler parameters from actual dataset
+            scaler.mean_ = np.array([1987.0])  # Mean year from actual data
+            scaler.scale_ = np.array([21.64871050817269])   # Standard deviation from actual data
             scaler.n_features_in_ = 1
 
 def predict_model(year, model_info):
