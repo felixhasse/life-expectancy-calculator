@@ -74,10 +74,12 @@ continent = st.sidebar.selectbox(
 
 # Country selection based on continent
 available_countries = countries_data.get(continent, [])
+# Add "Other" option to use continent-level weights
+available_countries_with_other = available_countries + ["Other"]
 country = st.sidebar.selectbox(
     "Select Country:",
-    options=available_countries,
-    help="Choose a specific country (if not listed, continent-level data will be used)"
+    options=available_countries_with_other,
+    help="Choose a specific country or 'Other' to use continent-level data"
 )
 
 # Sex selection
@@ -341,6 +343,9 @@ with col1:
                 doctor_impact = 0
             
             # Create impact DataFrame
+            # Handle display name for "Other" option
+            display_country = "continent-level" if country == "Other" else country
+            
             impact_data = {
                 'Factor': ['Baseline (Demographics)', 'Physical Activity', 'Fast Food', 'Alcohol', 'Smoking', 'Family History', 'BMI', 'Stress Level', 'Driving Risk', 'Doctor Visits'],
                 'Impact (years)': [
@@ -356,7 +361,7 @@ with col1:
                     f"+{doctor_impact:.1f}"
                 ],
                 'Description': [
-                    f"Base life expectancy for {sex.lower()} in {country}, {continent} in {year}",
+                    f"Base life expectancy for {sex.lower()} in {display_country}, {continent} in {year}",
                     f"Regular exercise: +{pa_impact:.1f} years",
                     f"Fast food consumption: {ff_impact:.1f} years",
                     f"Alcohol consumption: {alcohol_impact:.1f} years",
@@ -383,6 +388,7 @@ with col2:
     <div class="explanation-box">
         <h4>How it works:</h4>
         <p>This calculator uses machine learning models trained on historical life expectancy data from the UN Population Division. The models consider demographic factors and apply adjustments based on lifestyle choices.</p>
+        <p><strong>Country Selection:</strong> Choose a specific country for country-specific predictions, or select "Other" to use continent-level averages for countries not specifically modeled.</p>
     </div>
     """, unsafe_allow_html=True)
     

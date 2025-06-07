@@ -5,9 +5,10 @@ A Streamlit web application that predicts life expectancy based on demographic i
 ## Features
 
 - **Country-Specific Predictions**: Covers 16 countries across 4 continents
-- **Lifestyle Factor Analysis**: Includes physical activity, diet, alcohol, and smoking impacts
+- **Comprehensive Health Analysis**: Includes lifestyle, genetic, and behavioral factors
 - **Interactive Interface**: User-friendly Streamlit interface with real-time predictions
-- **Impact Breakdown**: Shows how each lifestyle factor affects life expectancy
+- **Impact Breakdown**: Shows how each factor affects life expectancy
+- **BMI Calculator**: Built-in BMI calculation from height and weight
 - **Historical Data**: Based on UN Population Division statistics from 1950-2050
 
 ## Available Countries
@@ -58,6 +59,7 @@ streamlit run streamlit_app.py
 3. Use the sidebar to input:
    - **Demographics**: Continent, country, sex, and year
    - **Lifestyle factors**: Physical activity, fast food consumption, alcohol intake, smoking status
+   - **Health factors**: Family history, BMI, stress level, driving risk, healthcare visits
 
 4. Click "Calculate Life Expectancy" to get your prediction
 
@@ -75,6 +77,15 @@ The app applies research-based adjustments for lifestyle factors:
 - **Fast Food**: Up to -15% reduction for frequent consumption (14+ meals/week)
 - **Alcohol**: -1 year for moderate drinking (1-2 drinks/week), -3 years for heavy drinking (3+ drinks/week)
 - **Smoking**: -10 to -12 years for current smokers, with recovery benefits for quitters based on quit age
+
+### Health Factor Adjustments
+Additional health-related factors that affect predictions:
+
+- **Family History**: -2 years for some family history, -5 years for strong family history of chronic diseases
+- **BMI (Body Mass Index)**: -2 years for underweight (<18.5) or overweight (25-30), -5 years for obesity (>30)
+- **Stress Level**: -0.3 years per stress level point (scale 0-10)
+- **Driving Risk**: -1 year for moderate risk, -3 years for high-risk driving behaviors
+- **Healthcare Access**: +1 year for occasional checkups, +2 years for regular preventive care
 
 ### Sources for Lifestyle Impacts
 - Physical activity benefits: Based on studies showing 0.43-6.9 year increases
