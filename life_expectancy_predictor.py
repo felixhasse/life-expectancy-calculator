@@ -357,7 +357,12 @@ def cont_weights_female(country, continent):
     
     return continent_weights_female.get(continent)
 
-def predict_life_expectancy(country, continent, sex, year=2024, physical_activity=0, fast_food=0, alcohol=0, smoke="never", smoke_quit_age=25):
+def predict_life_expectancy(
+    country, continent, sex, year=2024,
+    physical_activity=0, fast_food=0, alcohol=0, smoke="never", smoke_quit_age=25,
+    family_history=0, bmi=None, stress_level=None,
+    driving_risk=0, doctor_visits=0
+):
     """
     Predict life expectancy based on demographic and lifestyle factors.
     
@@ -371,6 +376,11 @@ def predict_life_expectancy(country, continent, sex, year=2024, physical_activit
     - alcohol: Number of alcoholic drinks per week
     - smoke: Smoking status ("never", "former", "current")
     - smoke_quit_age: Age when smoking was quit (if former smoker)
+    - family_history: Family history of chronic diseases (0=none, 1=some, 2+=strong)
+    - bmi: Body Mass Index (optional)
+    - stress_level: Stress level on scale 0-10 (optional)
+    - driving_risk: Driving risk level (0=safe, 1=moderate, 2+=high risk)
+    - doctor_visits: Regular doctor visits (0=none, 1=occasional, 2+=regular)
     
     Returns:
     - Predicted life expectancy in years (rounded integer)
@@ -395,13 +405,13 @@ def predict_life_expectancy(country, continent, sex, year=2024, physical_activit
     # Lifestyle adjustments
     
     # Physical activity can increase life expectancy from 0.43 to 6.9 additional years
-    pa_bonus = min(physical_activity, 7) * (6.9/7)
+    pa_bonus = min(physical_activity, 7) * (6.9 / 7)
 
     # Eating fast food can decrease life expectancy by 15%
     ff_penalty = (min(fast_food, 14) / 14) * 0.15
 
     # Alcohol adjustment
-    if alcohol > 0 and alcohol < 3:
+    if 0 < alcohol < 3:
         alcohol_penalty = 1
     elif alcohol >= 3:
         alcohol_penalty = 3
@@ -422,8 +432,51 @@ def predict_life_expectancy(country, continent, sex, year=2024, physical_activit
             elif smoke_quit_age <= 64:
                 smoke_penalty -= 4
 
+    # New parameters
+    # Family history penalty
+    if family_history == 0:
+        family_history_penalty = 0
+    elif family_history == 1:
+        family_history_penalty = 2
+    else:
+        family_history_penalty = 5
+
+    # BMI penalty
+    if bmi is not None:
+        if bmi < 18.5:
+            bmi_penalty = 2
+        elif bmi < 25:
+            bmi_penalty = 0
+        elif bmi < 30:
+            bmi_penalty = 2
+        else:
+            bmi_penalty = 5
+    else:
+        bmi_penalty = 0
+
+    # Stress penalty
+    stress_penalty = stress_level * 0.3 if stress_level is not None else 0
+
+    # Driving penalty
+    if driving_risk == 0:
+        driving_penalty = 0
+    elif driving_risk == 1:
+        driving_penalty = 1
+    else:
+        driving_penalty = 3
+
+    # Doctor visits bonus
+    if doctor_visits == 2:
+        doctor_bonus = 2
+    elif doctor_visits == 1:
+        doctor_bonus = 1
+    else:
+        doctor_bonus = 0
+
     # Calculate final adjusted life expectancy
-    adjusted = (basic_le * (1 - ff_penalty)) + pa_bonus - alcohol_penalty - smoke_penalty
+    adjusted = (basic_le * (1 - ff_penalty)) + pa_bonus - alcohol_penalty - smoke_penalty \
+               - family_history_penalty - bmi_penalty - stress_penalty - driving_penalty + doctor_bonus
+
     return round(adjusted)
 
 def get_available_countries():
