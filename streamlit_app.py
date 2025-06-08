@@ -218,8 +218,8 @@ if stress_input:
 doctor_visits = st.sidebar.selectbox(
     "Regular Doctor Visits:",
     options=[0, 1, 2],
-    format_func=lambda x: {0: "Rarely/Never", 1: "Occasional checkups", 2: "Regular checkups"}[x],
-    help="Frequency of preventive healthcare visits"
+    format_func=lambda x: {0: "Rarely/Never", 1: "Only when ill", 2: "Regular checkups"}[x],
+    help="Frequency of healthcare visits"
 )
 
 # Main content area
