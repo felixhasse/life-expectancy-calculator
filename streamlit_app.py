@@ -96,31 +96,31 @@ year = 2025
 st.sidebar.subheader("🏃‍♀️ Lifestyle Factors")
 
 # Physical activity
-physical_activity = st.sidebar.slider(
-    "Physical Activity (hours/week):",
-    min_value=0.0,
-    max_value=7.0,
-    value=2.0,
-    step=0.5,
-    help="Hours of physical activity per week (0-7 hours)"
+physical_activity = st.sidebar.selectbox(
+    "Physical Activity Level:",
+    options=[0, 1, 2, 3],
+    format_func=lambda x: {0: "None", 1: "Low", 2: "Medium", 3: "High"}[x],
+    index=1,
+    help="Physical activity level based on regularity and intensity"
 )
 
-# Fast food consumption
-fast_food = st.sidebar.slider(
-    "Fast Food Meals (per week):",
-    min_value=0,
-    max_value=14,
-    value=2,
-    help="Number of fast food meals consumed per week"
+# Processed food consumption  
+fast_food = st.sidebar.selectbox(
+    "Processed Food Consumption:",
+    options=[0, 1, 2, 3, 4],
+    format_func=lambda x: {0: "None", 1: "Low", 2: "Medium", 3: "High", 4: "Very High"}[x],
+    index=1,
+    help="Level of ultra-processed food consumption"
 )
 
-# Alcohol consumption
+# Alcohol consumption (drinks per week)
 alcohol = st.sidebar.slider(
-    "Alcoholic Drinks (per week):",
+    "Alcohol Consumption (drinks/week):",
     min_value=0,
-    max_value=20,
+    max_value=50,
     value=0,
-    help="Number of alcoholic drinks consumed per week"
+    step=1,
+    help="Grams of alcohol per week (1 drink ≈ 10g). 100-200g = moderate, 200-350g = high, >350g = very high"
 )
 
 # Smoking status
@@ -146,10 +146,10 @@ st.sidebar.subheader("🏥 Health Factors")
 
 # Family history
 family_history = st.sidebar.selectbox(
-    "Family History of Chronic Diseases:",
+    "Family History of Cardiovascular Disease:",
     options=[0, 1, 2],
-    format_func=lambda x: {0: "None", 1: "Some family history", 2: "Strong family history"}[x],
-    help="Family history of heart disease, diabetes, cancer, etc."
+    format_func=lambda x: {0: "No family history", 1: "Some family history", 2: "Strong family history"}[x],
+    help="Family history of heart disease, stroke, and related cardiovascular conditions"
 )
 
 # BMI input
@@ -196,24 +196,16 @@ if bmi_input:
             st.sidebar.write(f"Calculated BMI: {bmi:.1f}")
 
 # Stress level
-stress_input = st.sidebar.checkbox("Include stress level", value=False)
+stress_input = st.sidebar.checkbox("Include stress attitude", value=False)
 stress_level = None
 if stress_input:
-    stress_level = st.sidebar.slider(
-        "Stress Level (0-10):",
-        min_value=0,
-        max_value=10,
-        value=3,
-        help="Average stress level: 0=very low, 10=extremely high"
+    stress_level = st.sidebar.selectbox(
+        "Attitude Towards Stress:",
+        options=[0, 1, 2],
+        format_func=lambda x: {0: "Positive influence", 1: "Neutral attitude", 2: "Overwhelming/negative"}[x],
+        index=1,
+        help="How you generally view and handle stress in your life"
     )
-
-# Driving risk
-driving_risk = st.sidebar.selectbox(
-    "Driving Risk Level:",
-    options=[0, 1, 2],
-    format_func=lambda x: {0: "Safe driver", 1: "Moderate risk", 2: "High risk driver"}[x],
-    help="Driving habits and risk factors (speeding, aggressive driving, etc.)"
-)
 
 # Doctor visits
 doctor_visits = st.sidebar.selectbox(
@@ -240,13 +232,12 @@ with col1:
                 year=year,
                 physical_activity=physical_activity,
                 fast_food=fast_food,
-                alcohol=alcohol,
+                alcohol=alcohol * 10,
                 smoke=smoke,
                 smoke_quit_age=smoke_quit_age,
                 family_history=family_history,
                 bmi=bmi,
                 stress_level=stress_level,
-                driving_risk=driving_risk,
                 doctor_visits=doctor_visits
             )
             
@@ -260,7 +251,8 @@ with col1:
             # Show breakdown of factors
             st.subheader("📊 Factors Impact Analysis")
             
-            # Get baseline prediction (without lifestyle factors)
+            # Calculate individual impacts using the predict_life_expectancy function
+            # Get baseline (all factors at neutral/default values)
             baseline = predict_life_expectancy(
                 country=country,
                 continent=continent.lower(),
@@ -274,97 +266,107 @@ with col1:
                 family_history=0,
                 bmi=None,
                 stress_level=None,
-                driving_risk=0,
-                doctor_visits=0
+                doctor_visits=1  # Default to "when ill" as neutral
             )
             
-            # Calculate individual impacts
-            pa_impact = min(physical_activity, 7) * (6.9/7)
-            ff_impact = -(baseline * (min(fast_food, 14) / 14) * 0.15)
+            # Calculate impact of each factor by changing one at a time
+            # Physical activity impact
+            pa_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=physical_activity, fast_food=0, alcohol=0, smoke="never",
+                smoke_quit_age=25, family_history=0, bmi=None, stress_level=None, doctor_visits=1
+            )
+            pa_impact = pa_prediction - baseline
             
-            alcohol_impact = 0
-            if alcohol > 0 and alcohol < 3:
-                alcohol_impact = -1
-            elif alcohol >= 3:
-                alcohol_impact = -3
+            # Processed food impact
+            ff_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=0, fast_food=fast_food, alcohol=0, smoke="never",
+                smoke_quit_age=25, family_history=0, bmi=None, stress_level=None, doctor_visits=1
+            )
+            ff_impact = ff_prediction - baseline
+            
+            # Alcohol impact
+            alcohol_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=0, fast_food=0, alcohol=alcohol, smoke="never",
+                smoke_quit_age=25, family_history=0, bmi=None, stress_level=None, doctor_visits=1
+            )
+            alcohol_impact = alcohol_prediction - baseline
                 
-            smoke_impact = 0
-            if smoke != "never":
-                smoke_impact = -(12 if sex.lower() == "male" else 11)
-                if smoke == "former":
-                    if smoke_quit_age <= 34:
-                        smoke_impact += 10
-                    elif smoke_quit_age <= 44:
-                        smoke_impact += 9
-                    elif smoke_quit_age <= 54:
-                        smoke_impact += 6
-                    elif smoke_quit_age <= 64:
-                        smoke_impact += 4
+            # Smoking impact
+            smoke_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=0, fast_food=0, alcohol=0, smoke=smoke,
+                smoke_quit_age=smoke_quit_age, family_history=0, bmi=None, stress_level=None, doctor_visits=1
+            )
+            smoke_impact = smoke_prediction - baseline
             
-            # New health factors impacts
-            if family_history == 0:
-                family_impact = 0
-            elif family_history == 1:
-                family_impact = -2
-            else:
-                family_impact = -5
+            # Family history impact
+            family_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=0, fast_food=0, alcohol=0, smoke="never",
+                smoke_quit_age=25, family_history=family_history, bmi=None, stress_level=None, doctor_visits=1
+            )
+            family_impact = family_prediction - baseline
             
-            bmi_impact = 0
+            # BMI impact
             if bmi is not None:
-                if bmi < 18.5:
-                    bmi_impact = -2
-                elif bmi < 25:
-                    bmi_impact = 0
-                elif bmi < 30:
-                    bmi_impact = -2
-                else:
-                    bmi_impact = -5
-            
-            stress_impact = -(stress_level * 0.3) if stress_level is not None else 0
-            
-            if driving_risk == 0:
-                driving_impact = 0
-            elif driving_risk == 1:
-                driving_impact = -1
+                bmi_prediction = predict_life_expectancy(
+                    country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                    physical_activity=0, fast_food=0, alcohol=0, smoke="never",
+                    smoke_quit_age=25, family_history=0, bmi=bmi, stress_level=None, doctor_visits=1
+                )
+                bmi_impact = bmi_prediction - baseline
             else:
-                driving_impact = -3
+                bmi_impact = 0
             
-            if doctor_visits == 2:
-                doctor_impact = 2
-            elif doctor_visits == 1:
-                doctor_impact = 1
+            # Stress impact
+            if stress_level is not None:
+                stress_prediction = predict_life_expectancy(
+                    country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                    physical_activity=0, fast_food=0, alcohol=0, smoke="never",
+                    smoke_quit_age=25, family_history=0, bmi=None, stress_level=stress_level, doctor_visits=1
+                )
+                stress_impact = stress_prediction - baseline
             else:
-                doctor_impact = 0
+                stress_impact = 0
+            
+            # Doctor visits impact
+            doctor_prediction = predict_life_expectancy(
+                country=country, continent=continent.lower(), sex=sex.lower(), year=year,
+                physical_activity=0, fast_food=0, alcohol=0, smoke="never",
+                smoke_quit_age=25, family_history=0, bmi=None, stress_level=None, doctor_visits=doctor_visits
+            )
+            doctor_impact = doctor_prediction - baseline
             
             # Create impact DataFrame
             # Handle display name for "Other" option
             display_country = "continent-level" if country == "Other" else country
             
             impact_data = {
-                'Factor': ['Baseline (Demographics)', 'Physical Activity', 'Fast Food', 'Alcohol', 'Smoking', 'Family History', 'BMI', 'Stress Level', 'Driving Risk', 'Doctor Visits'],
+                'Factor': ['Baseline (Demographics)', 'Physical Activity', 'Processed Food', 'Alcohol', 'Smoking', 'Family History', 'BMI', 'Stress Attitude', 'Doctor Visits'],
                 'Impact (years)': [
-                    baseline, 
+                    f"{baseline:.1f}", 
                     f"+{pa_impact:.1f}", 
                     f"{ff_impact:.1f}", 
                     f"{alcohol_impact:.1f}", 
                     f"{smoke_impact:.1f}",
-                    f"{family_impact:.1f}",
+                    f"{family_impact:+.1f}",
                     f"{bmi_impact:.1f}" if bmi is not None else "Not included",
-                    f"{stress_impact:.1f}" if stress_level is not None else "Not included",
-                    f"{driving_impact:.1f}",
-                    f"+{doctor_impact:.1f}"
+                    f"{stress_impact:+.1f}" if stress_level is not None else "Not included",
+                    f"{doctor_impact:+.1f}"
                 ],
                 'Description': [
                     f"Base life expectancy for {sex.lower()} in {display_country}, {continent} in 2025",
-                    f"Regular exercise: +{pa_impact:.1f} years",
-                    f"Fast food consumption: {ff_impact:.1f} years",
+                    f"Physical activity level: +{pa_impact:.1f} years",
+                    f"Processed food consumption: {ff_impact:.1f} years",
                     f"Alcohol consumption: {alcohol_impact:.1f} years",
                     f"Smoking status: {smoke_impact:.1f} years",
-                    f"Family history of chronic diseases: {family_impact:.1f} years",
+                    f"Family history of cardiovascular disease: {family_impact:+.1f} years",
                     f"BMI impact: {bmi_impact:.1f} years" if bmi is not None else "BMI not included in calculation",
-                    f"Stress level impact: {stress_impact:.1f} years" if stress_level is not None else "Stress level not included",
-                    f"Driving safety: {driving_impact:.1f} years",
-                    f"Regular healthcare: +{doctor_impact:.1f} years"
+                    f"Stress attitude impact: {stress_impact:+.1f} years" if stress_level is not None else "Stress attitude not included",
+                    f"Regular healthcare: {doctor_impact:+.1f} years"
                 ]
             }
             
@@ -388,16 +390,15 @@ with col2:
     
     st.markdown("""
     <div class="lifestyle-impact">
-        <strong>Lifestyle Impact Factors:</strong><br>
-        • <strong>Physical Activity:</strong> Can add up to 6.9 years<br>
-        • <strong>Fast Food:</strong> Can reduce life expectancy by up to 15%<br>
-        • <strong>Alcohol:</strong> Moderate consumption (-1 year), heavy (-3 years)<br>
-        • <strong>Smoking:</strong> Can reduce by 10-12 years, but quitting helps significantly<br>
-        • <strong>Family History:</strong> Some history (-2 years), strong history (-5 years)<br>
-        • <strong>BMI:</strong> Underweight (-2 years), overweight (-2 years), obese (-5 years)<br>
-        • <strong>Stress:</strong> Each stress level point reduces by 0.3 years<br>
-        • <strong>Driving Risk:</strong> Moderate risk (-1 year), high risk (-3 years)<br>
-        • <strong>Healthcare:</strong> Regular checkups can add up to 2 years
+        <strong>Lifestyle Impact Factors (based on research):</strong><br>
+        • <strong>Physical Activity:</strong> 0.4 to 6.9 years increased life expectancy<br>
+        • <strong>Processed Food:</strong> High consumption reduces life expectancy by up to 10%<br>
+        • <strong>Alcohol:</strong> 100-200g/week (-0.5 years), 200-350g/week (-1.5 years), >350g/week (-4.5 years)<br>
+        • <strong>Smoking:</strong> Current smokers lose ~10 years; quitting before 35 can restore full lifespan<br>
+        • <strong>Family History (CVD):</strong> No history (+2 years), some history (-1 year), strong history (-2 years)<br>
+        • <strong>BMI:</strong> Overweight: -3.1 to -3.3 years; Obese: -5.8 to -7.1 years<br>
+        • <strong>Stress Attitude:</strong> Positive view (+1 year), neutral (0), overwhelming (-1 year)<br>
+        • <strong>Healthcare:</strong> Regular checkups (+1 year), never visiting doctor (-1 year)
     </div>
     """, unsafe_allow_html=True)
 

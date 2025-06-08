@@ -361,7 +361,7 @@ def predict_life_expectancy(
     country, continent, sex, year=2024,
     physical_activity=0, fast_food=0, alcohol=0, smoke="never", smoke_quit_age=25,
     family_history=0, bmi=None, stress_level=None,
-    driving_risk=0, doctor_visits=0
+    doctor_visits=0
 ):
     """
     Predict life expectancy based on demographic and lifestyle factors.
@@ -371,16 +371,15 @@ def predict_life_expectancy(
     - continent: Continent name (africa, americas, asia, europe)  
     - sex: Gender (male/female)
     - year: Year for prediction (default 2024)
-    - physical_activity: Hours of physical activity per week (0-7)
-    - fast_food: Number of fast food meals per week (0-14)
-    - alcohol: Number of alcoholic drinks per week
+    - physical_activity: Physical activity level (0=none, 1=low, 2=medium, 3=high)
+    - fast_food: Processed food consumption level (0=none, 1=low, 2=medium, 3=high, 4=very high)
+    - alcohol: Grams of alcohol per week
     - smoke: Smoking status ("never", "former", "current")
     - smoke_quit_age: Age when smoking was quit (if former smoker)
-    - family_history: Family history of chronic diseases (0=none, 1=some, 2+=strong)
+    - family_history: Family history of cardiovascular disease (0=none, 1=some, 2=strong)
     - bmi: Body Mass Index (optional)
-    - stress_level: Stress level on scale 0-10 (optional)
-    - driving_risk: Driving risk level (0=safe, 1=moderate, 2+=high risk)
-    - doctor_visits: Regular doctor visits (0=none, 1=occasional, 2+=regular)
+    - stress_level: Stress attitude (0=positive, 1=neutral, 2=overwhelming)
+    - doctor_visits: Doctor visit frequency (0=never, 1=when ill, 2=regular checkups)
     
     Returns:
     - Predicted life expectancy in years (rounded integer)
@@ -402,80 +401,104 @@ def predict_life_expectancy(
     # Get baseline life expectancy prediction
     basic_le = predict_model(year, model_info)
 
-    # Lifestyle adjustments
+    # Lifestyle adjustments based on Sources.md
     
-    # Physical activity can increase life expectancy from 0.43 to 6.9 additional years
-    pa_bonus = min(physical_activity, 7) * (6.9 / 7)
+    # Physical activity adjustment (0.4 to 6.9 years)
+    if physical_activity == 0:
+        pa_bonus = 0
+    elif physical_activity == 1:
+        pa_bonus = 0.4  # Little bit of activity
+    elif physical_activity == 2:
+        pa_bonus = 3.6  # Medium activity
+    else:  # physical_activity == 3
+        pa_bonus = 6.9  # High activity
 
-    # Eating fast food can decrease life expectancy by 15%
-    ff_penalty = (min(fast_food, 14) / 14) * 0.15
+    # Processed food consumption (0% to 10% reduction in life expectancy)
+    if fast_food == 0:
+        ff_penalty_percent = 0.0  # No consumption
+    elif fast_food == 1:
+        ff_penalty_percent = 0.025  # Low consumption: 2.5%
+    elif fast_food == 2:
+        ff_penalty_percent = 0.05   # Medium consumption: 5%
+    elif fast_food == 3:
+        ff_penalty_percent = 0.075  # High consumption: 7.5%
+    else:  # fast_food == 4
+        ff_penalty_percent = 0.10   # Very high consumption: 10%
 
-    # Alcohol adjustment
-    if 0 < alcohol < 3:
-        alcohol_penalty = 1
-    elif alcohol >= 3:
-        alcohol_penalty = 3
-    else:
+    # Alcohol adjustment (grams per week to years lost)
+    # 100-200g: -0.5 years, 200-350g: -1 to -2 years, >350g: -4 to -5 years
+    if alcohol < 100:
         alcohol_penalty = 0
+    elif alcohol <= 200:
+        alcohol_penalty = 0.5
+    elif alcohol <= 350:
+        alcohol_penalty = 1.5  # Average of 1-2 years
+    else:
+        alcohol_penalty = 4.5  # Average of 4-5 years
 
-    # Smoking can decrease life expectancy by up to 10-12 years
+    # Smoking adjustment (10 years shorter life expectancy)
     smoke_penalty = 0
-    if smoke != "never":
-        smoke_penalty = 12 if sex == "male" else 11
-        if smoke == "former":
-            if smoke_quit_age <= 34:
-                smoke_penalty -= 10
-            elif smoke_quit_age <= 44:
-                smoke_penalty -= 9
-            elif smoke_quit_age <= 54:
-                smoke_penalty -= 6
-            elif smoke_quit_age <= 64:
-                smoke_penalty -= 4
-
-    # New parameters
-    # Family history penalty
-    if family_history == 0:
-        family_history_penalty = 0
-    elif family_history == 1:
-        family_history_penalty = 2
-    else:
-        family_history_penalty = 5
-
-    # BMI penalty
-    if bmi is not None:
-        if bmi < 18.5:
-            bmi_penalty = 2
-        elif bmi < 25:
-            bmi_penalty = 0
-        elif bmi < 30:
-            bmi_penalty = 2
+    if smoke == "current":
+        smoke_penalty = 10  # At least 10 years shorter
+    elif smoke == "former":
+        # Adults who quit at different ages gained years back
+        if smoke_quit_age <= 34:
+            smoke_penalty = 0  # Gained about 10 years back (full recovery)
+        elif smoke_quit_age <= 44:
+            smoke_penalty = 1  # Gained about 9 years back
+        elif smoke_quit_age <= 54:
+            smoke_penalty = 4  # Gained about 6 years back
         else:
-            bmi_penalty = 5
-    else:
-        bmi_penalty = 0
+            smoke_penalty = 10  # No significant recovery after 54
 
-    # Stress penalty
-    stress_penalty = stress_level * 0.3 if stress_level is not None else 0
+    # Family history of cardiovascular disease
+    if family_history == 0:
+        family_history_bonus = 2  # No family history: +2 years
+    elif family_history == 1:
+        family_history_penalty = 1  # Some family history: -1 year
+        family_history_bonus = 0
+    else:  # family_history == 2
+        family_history_penalty = 2  # Strong family history: -2 years
+        family_history_bonus = 0
 
-    # Driving penalty
-    if driving_risk == 0:
-        driving_penalty = 0
-    elif driving_risk == 1:
-        driving_penalty = 1
-    else:
-        driving_penalty = 3
+    # BMI adjustment
+    bmi_penalty = 0
+    if bmi is not None:
+        if 25 <= bmi < 30:  # Overweight
+            if sex == "female":
+                bmi_penalty = 3.3
+            else:  # male
+                bmi_penalty = 3.1
+        elif bmi >= 30:  # Obese
+            if sex == "female":
+                bmi_penalty = 7.1
+            else:  # male
+                bmi_penalty = 5.8
 
-    # Doctor visits bonus
-    if doctor_visits == 2:
-        doctor_bonus = 2
-    elif doctor_visits == 1:
-        doctor_bonus = 1
-    else:
-        doctor_bonus = 0
+    # Stress adjustment
+    stress_adjustment = 0
+    if stress_level is not None:
+        if stress_level == 0:  # Positive attitude to stress
+            stress_adjustment = 1
+        elif stress_level == 1:  # Neutral attitude
+            stress_adjustment = 0
+        else:  # stress_level == 2, overwhelming stress
+            stress_adjustment = -1
+
+    # Doctor visits adjustment
+    if doctor_visits == 0:  # Never visiting doctor
+        doctor_adjustment = -1
+    elif doctor_visits == 1:  # Going when ill
+        doctor_adjustment = 0
+    else:  # doctor_visits == 2, regular checkups
+        doctor_adjustment = 1
 
     # Calculate final adjusted life expectancy
-    adjusted = (basic_le * (1 - ff_penalty)) + pa_bonus - alcohol_penalty - smoke_penalty \
-               - family_history_penalty - bmi_penalty - stress_penalty - driving_penalty + doctor_bonus
+    family_penalty = family_history_penalty if family_history > 0 else 0
+    family_bonus = family_history_bonus if family_history == 0 else 0
+    
+    adjusted = (basic_le * (1 - ff_penalty_percent)) + pa_bonus - alcohol_penalty - smoke_penalty \
+               - family_penalty + family_bonus - bmi_penalty + stress_adjustment + doctor_adjustment
 
     return round(adjusted)
 
