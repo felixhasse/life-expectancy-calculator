@@ -1,134 +1,55 @@
-# 🌍 Life Expectancy Calculator
+# Life Expectancy Calculator
 
-A Streamlit web application that predicts life expectancy based on demographic information and lifestyle factors. The app uses machine learning models trained on historical UN Population Division data.
-
-## Features
-
-- **Country-Specific Predictions**: Covers 16 countries across 4 continents
-- **Comprehensive Health Analysis**: Includes lifestyle, genetic, and behavioral factors
-- **Interactive Interface**: User-friendly Streamlit interface with real-time predictions
-- **Impact Breakdown**: Shows how each factor affects life expectancy
-- **BMI Calculator**: Built-in BMI calculation from height and weight
-- **Historical Data**: Based on UN Population Division statistics from 1950-2050
-
-## Available Countries
-
-### Africa
-- Sierra Leone
-- Congo
-- Madagascar
-
-### Americas
-- Brazil
-- Puerto Rico
-- Cuba
-- Canada
-- United States of America
-
-### Asia
-- Japan
-- Sri Lanka
-- Indonesia
-- China
-
-### Europe
-- Germany
-- Italy
-- Portugal
-- Russian Federation
-
-## Installation
-
-1. Clone or download this repository
-2. Install the required dependencies:
-
+## Running the app 
+First, install the required dependencies: 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
-
-1. Run the Streamlit app:
-
+Then, the app can be run using:
 ```bash
 streamlit run streamlit_app.py
 ```
 
-2. Open your web browser and navigate to the provided URL (typically `http://localhost:8501`)
+A hosted version of the app can be found at https://life-expectancy-calculator.streamlit.app
 
-3. Use the sidebar to input:
-   - **Demographics**: Continent, country, sex, and year
-   - **Lifestyle factors**: Physical activity, fast food consumption, alcohol intake, smoking status
-   - **Health factors**: Family history, BMI, stress level, driving risk, healthcare visits
+## Sources
+The life expectancy model is based on the following sources:
+- Smoking is associated with at least 10 years shorter life expectancy. (https://www.nejm.org/doi/full/10.1056/NEJMsa1211128)
+  - Adults who had quit smoking at 25 to 34, 35 to 44, or 45 to 54 years of age gained about 10, 9, and 6 years of life, respectively, as compared with those who continued to smoke
 
-4. Click "Calculate Life Expectancy" to get your prediction
+- 100-200g alcohol per week decreases life expectancy by 0.5 years, 200-350 by 1-2 years and >350 by 4-5 years (https://www.thelancet.com/article/S0140-6736(18)30134-X/fulltext#fig1)
+  - One drink is 10g
 
-## How It Works
+- BMI
+    - Overweight (25 =< BMI < 30): -3.3 years in females, -3.1 in males
+    - Obese (BMI >= 30): - 7.1 years in females, -5.8 in males
+    - Source: https://www.acpjournals.org/doi/abs/10.7326/0003-4819-138-1-200301070-00008
 
-### Base Prediction Model
-- Uses linear regression models fitted with Singular Value Decomposition (SVD)
-- Country-specific models when available, falls back to continent-level models
-- Trained on historical life expectancy trends from 1950-2050
+- Stress
+    - Seeing stress as a positive influence: +1 year
+    - Neutral attitude to stress: 0 years
+    - Finding stress overwhelming: - 1 year
+    - Source: https://media.nmfn.com/tnetwork/lifespan/index.html#4
 
-### Lifestyle Adjustments
-The app applies research-based adjustments for lifestyle factors:
+- Physical Activity
+    - https://pmc.ncbi.nlm.nih.gov/articles/PMC3395188/: 0.4 to 6.9 years increased life expectancy with physical exercise
+    - We use 6.9 years for high activity level, 0.4 for a little bit of physical activity, 3.6 for medium activity
 
-- **Physical Activity**: Up to +6.9 years for regular exercise (7+ hours/week)
-- **Fast Food**: Up to -15% reduction for frequent consumption (14+ meals/week)
-- **Alcohol**: -1 year for moderate drinking (1-2 drinks/week), -3 years for heavy drinking (3+ drinks/week)
-- **Smoking**: -10 to -12 years for current smokers, with recovery benefits for quitters based on quit age
+- Doctor Visits
+    - Regular checkups: +1 year
+    - Going to the doctor when ill: 0 years
+    - Never visiting a doctor: -1 year
+    - Source: https://media.nmfn.com/tnetwork/lifespan/index.html#12
 
-### Health Factor Adjustments
-Additional health-related factors that affect predictions:
+- Family history of Cardiovascular Disease
+    - No family history: +2 years
+    - Some family history: -1 years
+    - Strong family history: -2 years
+    - Source: https://media.nmfn.com/tnetwork/lifespan/index.html#2
 
-- **Family History**: -2 years for some family history, -5 years for strong family history of chronic diseases
-- **BMI (Body Mass Index)**: -2 years for underweight (<18.5) or overweight (25-30), -5 years for obesity (>30)
-- **Stress Level**: -0.3 years per stress level point (scale 0-10)
-- **Driving Risk**: -1 year for moderate risk, -3 years for high-risk driving behaviors
-- **Healthcare Access**: +1 year for occasional checkups, +2 years for regular preventive care
+- Processed food consumption
+    - https://edition.cnn.com/2024/07/01/health/worst-ultraprocessed-food-early-death-wellness
+    - Highest level of processed food consumption shortens life expectancy by 10%
+    - We use 10% for very high level, 7.5% for high, 5% for medium, 2.5% for low and 0% for no consumption
 
-### Sources for Lifestyle Impacts
-- Physical activity benefits: Based on studies showing 0.43-6.9 year increases
-- Fast food impacts: Research indicating 14-15% life expectancy reduction
-- Smoking effects: Well-documented 10+ year reduction, with age-dependent recovery for quitters
-
-## File Structure
-
-```
-├── streamlit_app.py              # Main Streamlit application
-├── life_expectancy_predictor.py  # Core prediction functions and models
-├── requirements.txt              # Python dependencies
-└── README.md                    # This file
-```
-
-## Model Details
-
-### Data Sources
-- UN Population Division life expectancy statistics
-- Historical data spanning 1950-2050
-- Country and continent-level aggregations
-
-### Methodology
-- **Linear Regression**: Models life expectancy trends over time
-- **SVD Fitting**: Robust parameter estimation using Singular Value Decomposition  
-- **Standardization**: Years are standardized for numerical stability
-- **Lifestyle Adjustments**: Evidence-based modifications applied to base predictions
-
-### Limitations
-- Predictions are statistical estimates based on population trends
-- Individual health conditions and genetic factors not considered
-- Lifestyle impacts are population-level averages
-- Future events (pandemics, medical breakthroughs, policy changes) not predicted
-- Limited to countries/regions with available training data
-
-## Development
-
-The models were originally developed in a Jupyter notebook (`p2_m4ml-2.ipynb`) and extracted into the modular Python files for the Streamlit app. The pre-computed model weights eliminate the need for the original training data during app execution.
-
-## Disclaimer
-
-This tool is for educational and informational purposes only. The predictions should not be used for medical decisions or insurance purposes. Consult healthcare professionals for personalized health advice.
-
-## License
-
-This project is for educational use. Please respect the data sources and research cited in the lifestyle factor calculations.

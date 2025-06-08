@@ -51,8 +51,8 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🌍 Life Expectancy Calculator</h1>', unsafe_allow_html=True)
 
 st.markdown("""
-This calculator predicts life expectancy based on demographic information and lifestyle factors. 
-The predictions are based on machine learning models trained on historical data from various countries and continents.
+This calculator predicts life expectancy based on demographic information and individual factors. 
+The predictions are based on linear regression models trained on historical data from various countries and continents as well as research on the impact of health and lifestyle factors on life expectancy.
 """)
 
 # Get available data
@@ -390,7 +390,7 @@ with col2:
     st.markdown("""
     <div class="explanation-box">
         <h4>How it works:</h4>
-        <p>This calculator uses machine learning models trained on historical life expectancy data from the UN Population Division. The models consider demographic factors and apply adjustments based on lifestyle choices.</p>
+        <p>This calculator uses linear regression models trained on historical life expectancy data from the UN Population Division. The models consider demographic factors and apply adjustments based on lifestyle choices.</p>
         <p><strong>Country Selection:</strong> Choose a specific country for country-specific predictions, or select "Other" to use continent-level averages for countries not specifically modeled.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -401,7 +401,7 @@ with col2:
         • <strong>Physical Activity:</strong> 0.4 to 6.9 years increased life expectancy<br>
         • <strong>Processed Food:</strong> High consumption reduces life expectancy by up to 10%<br>
         • <strong>Alcohol:</strong> 100-200g/week (-0.5 years), 200-350g/week (-1.5 years), >350g/week (-4.5 years)<br>
-        • <strong>Smoking:</strong> Current smokers lose ~10 years; quitting before 35 can restore full lifespan<br>
+        • <strong>Smoking:</strong> Current smokers lose 11-12 years; but quitting early can restore most of the lost lifespan<br>
         • <strong>Family History (CVD):</strong> No history (+2 years), some history (-1 year), strong history (-2 years)<br>
         • <strong>BMI:</strong> Overweight: -3.1 to -3.3 years; Obese: -5.8 to -7.1 years<br>
         • <strong>Stress Attitude:</strong> Positive view (+1 year), neutral (0), overwhelming (-1 year)<br>
