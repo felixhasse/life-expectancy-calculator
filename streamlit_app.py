@@ -113,7 +113,7 @@ physical_activity = st.sidebar.selectbox(
 
 # Processed food consumption  
 fast_food = st.sidebar.selectbox(
-    "Processed Food Consumption:",
+    "Ultra-Processed Food Consumption:",
     options=[0, 1, 2, 3, 4],
     format_func=lambda x: {0: "None", 1: "Low", 2: "Medium", 3: "High", 4: "Very High"}[x],
     index=1,
@@ -251,7 +251,7 @@ with col1:
             # Display the result
             st.markdown(f"""
             <div class="prediction-result">
-                🎯 Predicted Life Expectancy: {predicted_age} years
+                🎯 Predicted Life Expectancy: {round(predicted_age)} years
             </div>
             """, unsafe_allow_html=True)
             
@@ -296,7 +296,7 @@ with col1:
             # Alcohol impact
             alcohol_prediction = predict_life_expectancy(
                 country=country, continent=continent.lower(), sex=sex.lower(), year=year,
-                physical_activity=0, fast_food=0, alcohol=alcohol, smoke="never",
+                physical_activity=0, fast_food=0, alcohol=alcohol * 10, smoke="never",
                 smoke_quit_age=25, family_history=0, bmi=None, stress_level=None, doctor_visits=1
             )
             alcohol_impact = alcohol_prediction - baseline
@@ -352,7 +352,7 @@ with col1:
             display_country = "continent-level" if country == "Other" else country
             
             impact_data = {
-                'Factor': ['Baseline (Demographics)', 'Physical Activity', 'Processed Food', 'Alcohol', 'Smoking', 'Family History', 'BMI', 'Stress Attitude', 'Doctor Visits'],
+                'Factor': ['Baseline (Demographics)', 'Physical Activity', 'Ultra-Processed Food', 'Alcohol', 'Smoking', 'Family History', 'BMI', 'Stress Attitude', 'Doctor Visits'],
                 'Impact (years)': [
                     f"{baseline:.1f}", 
                     f"+{pa_impact:.1f}", 
@@ -367,7 +367,7 @@ with col1:
                 'Description': [
                     f"Base life expectancy for {sex.lower()} in {display_country}, {continent} in {year}",
                     f"Physical activity level: +{pa_impact:.1f} years",
-                    f"Processed food consumption: {ff_impact:.1f} years",
+                    f"Ultra-processed food consumption: {ff_impact:.1f} years",
                     f"Alcohol consumption: {alcohol_impact:.1f} years",
                     f"Smoking status: {smoke_impact:.1f} years",
                     f"Family history of cardiovascular disease: {family_impact:+.1f} years",
@@ -399,7 +399,7 @@ with col2:
     <div class="lifestyle-impact">
         <strong>Lifestyle Impact Factors (based on research):</strong><br>
         • <strong>Physical Activity:</strong> 0.4 to 6.9 years increased life expectancy<br>
-        • <strong>Processed Food:</strong> High consumption reduces life expectancy by up to 10%<br>
+        • <strong>Ultra-Processed Food:</strong> High consumption reduces life expectancy by up to 10%<br>
         • <strong>Alcohol:</strong> 100-200g/week (-0.5 years), 200-350g/week (-1.5 years), >350g/week (-4.5 years)<br>
         • <strong>Smoking:</strong> Current smokers lose 11-12 years; but quitting early can restore most of the lost lifespan<br>
         • <strong>Family History (CVD):</strong> No history (+2 years), some history (-1 year), strong history (-2 years)<br>
@@ -408,27 +408,6 @@ with col2:
         • <strong>Healthcare:</strong> Regular checkups (+1 year), never visiting doctor (-1 year)
     </div>
     """, unsafe_allow_html=True)
-
-# Additional information section
-with st.expander("📖 About the Data and Methodology"):
-    st.markdown("""
-    ### Data Sources
-    - **Primary Data:** UN Population Division life expectancy statistics
-    - **Countries Included:** 16 countries across 4 continents
-    - **Time Period:** Historical data from 1950-2050
-    
-    ### Methodology
-    - **Base Prediction:** Linear regression models fitted using SVD
-    - **Country-Specific Models:** Available for countries with sufficient data
-    - **Continent Fallback:** Uses continent-level models when country data unavailable
-    - **Lifestyle Adjustments:** Based on peer-reviewed medical research
-    
-    ### Limitations
-    - Predictions are estimates based on historical trends
-    - Individual health conditions are not considered
-    - Lifestyle impacts are population-level averages
-    - Future events (pandemics, medical breakthroughs) not predicted
-    """)
 
 # Footer
 st.markdown("---")

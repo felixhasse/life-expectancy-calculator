@@ -48,8 +48,8 @@ The life expectancy model is based on the following sources:
     - Strong family history: -2 years
     - Source: https://media.nmfn.com/tnetwork/lifespan/index.html#2
 
-- Processed food consumption
+- Ultra-Processed food consumption
     - https://edition.cnn.com/2024/07/01/health/worst-ultraprocessed-food-early-death-wellness
-    - Highest level of processed food consumption shortens life expectancy by 10%
+    - Highest level of ultra-processed food consumption shortens life expectancy by 10%
     - We use 10% for very high level, 7.5% for high, 5% for medium, 2.5% for low and 0% for no consumption
 

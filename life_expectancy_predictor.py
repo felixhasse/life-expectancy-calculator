@@ -438,18 +438,20 @@ def predict_life_expectancy(
 
     # Smoking adjustment (10 years shorter life expectancy)
     smoke_penalty = 0
-    if smoke == "current":
-        smoke_penalty = 10  # At least 10 years shorter
-    elif smoke == "former":
-        # Adults who quit at different ages gained years back
-        if smoke_quit_age <= 34:
-            smoke_penalty = 0  # Gained about 10 years back (full recovery)
-        elif smoke_quit_age <= 44:
-            smoke_penalty = 1  # Gained about 9 years back
-        elif smoke_quit_age <= 54:
-            smoke_penalty = 4  # Gained about 6 years back
+    if smoke != "never":
+        if sex == "female":
+            smoke_penalty = 11
         else:
-            smoke_penalty = 10  # No significant recovery after 54
+            smoke_penalty = 12
+    if (smoke == "former"):
+            if (smoke_quit_age <= 34):
+                smoke_penalty -= 10
+            elif (smoke_quit_age <= 44):
+                smoke_penalty -= 9
+            elif (smoke_quit_age <= 54):
+                smoke_penalty -= 6
+            elif (smoke_quit_age <= 64):
+                smoke_penalty -= 4
 
     # Family history of cardiovascular disease
     if family_history == 0:
@@ -500,7 +502,7 @@ def predict_life_expectancy(
     adjusted = (basic_le * (1 - ff_penalty_percent)) + pa_bonus - alcohol_penalty - smoke_penalty \
                - family_penalty + family_bonus - bmi_penalty + stress_adjustment + doctor_adjustment
 
-    return round(adjusted)
+    return adjusted
 
 def get_available_countries():
     """Return dictionary of available countries by continent."""
