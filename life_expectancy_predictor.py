@@ -400,8 +400,6 @@ def predict_life_expectancy(
 
     # Get baseline life expectancy prediction
     basic_le = predict_model(year, model_info)
-
-    # Lifestyle adjustments based on Sources.md
     
     # Physical activity adjustment (0.4 to 6.9 years)
     if physical_activity == 0:
@@ -410,7 +408,7 @@ def predict_life_expectancy(
         pa_bonus = 0.4  # Little bit of activity
     elif physical_activity == 2:
         pa_bonus = 3.6  # Medium activity
-    else:  # physical_activity == 3
+    else:
         pa_bonus = 6.9  # High activity
 
     # Processed food consumption (0% to 10% reduction in life expectancy)
@@ -432,9 +430,9 @@ def predict_life_expectancy(
     elif alcohol <= 200:
         alcohol_penalty = 0.5
     elif alcohol <= 350:
-        alcohol_penalty = 1.5  # Average of 1-2 years
+        alcohol_penalty = 1.5  
     else:
-        alcohol_penalty = 4.5  # Average of 4-5 years
+        alcohol_penalty = 4.5  
 
     # Smoking adjustment (10 years shorter life expectancy)
     smoke_penalty = 0
