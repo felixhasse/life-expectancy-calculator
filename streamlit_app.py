@@ -51,7 +51,7 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🌍 Life Expectancy Calculator</h1>', unsafe_allow_html=True)
 
 st.markdown("""
-This calculator predicts life expectancy for 2025 based on demographic information and lifestyle factors. 
+This calculator predicts life expectancy based on demographic information and lifestyle factors. 
 The predictions are based on machine learning models trained on historical data from various countries and continents.
 """)
 
@@ -89,8 +89,15 @@ sex = st.sidebar.selectbox(
     help="Choose the biological sex for the prediction"
 )
 
-# Set prediction year to 2025 (no user input needed)
-year = 2025
+# Year selection
+year = st.sidebar.slider(
+    "Prediction Year:",
+    min_value=1950,
+    max_value=2050,
+    value=2025,
+    step=1,
+    help="Select the year for which you want to predict life expectancy"
+)
 
 # Lifestyle factors section
 st.sidebar.subheader("🏃‍♀️ Lifestyle Factors")
@@ -358,7 +365,7 @@ with col1:
                     f"{doctor_impact:+.1f}"
                 ],
                 'Description': [
-                    f"Base life expectancy for {sex.lower()} in {display_country}, {continent} in 2025",
+                    f"Base life expectancy for {sex.lower()} in {display_country}, {continent} in {year}",
                     f"Physical activity level: +{pa_impact:.1f} years",
                     f"Processed food consumption: {ff_impact:.1f} years",
                     f"Alcohol consumption: {alcohol_impact:.1f} years",
